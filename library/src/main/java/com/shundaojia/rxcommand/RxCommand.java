@@ -44,10 +44,10 @@ public class RxCommand<T> {
     /**
      * create a command that is conditionally enabled.
      *
-     * @param enabledObservable An signal of BOOLs which indicate whether the command should
-     *              be enabled. `enabled` will be based on the latest value sent
-     *                 from this signal. Before any values are sent, `enabled` will
-     *               default to YES. This argument may be nil.
+     * @param enabledObservable An observable of BOOLs which indicate whether the command should
+     *              be enabled. {@link #enabled()} will be based on the latest value sent
+     *                 from this observable. Before any values are sent, {@link #enabled()} will
+     *               default to YES. This argument may be null.
      * @param func  - A function which will map each input value (passed to {@link #execute(Object)})
      *                 to a observable of work. The returned observable will be multicasted
      *                 to a replay subject, sent on {@link #executionObservables()}, then
@@ -219,7 +219,7 @@ public class RxCommand<T> {
      * enabled, returns a observable that will send an error.
      */
     @MainThread
-    public final Observable<T> execute(Object input) {
+    public final Observable<T> execute(@Nullable Object input) {
         boolean enabled = mImmediateEnabled.blockingFirst();
         if (!enabled) {
             return Observable.error(new IllegalStateException("The command is disabled and cannot be executed"));
