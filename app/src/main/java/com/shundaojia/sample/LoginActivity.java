@@ -1,4 +1,4 @@
-package me.listenzz.rxcommand;
+package com.shundaojia.sample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +14,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import me.listenzz.library.RxCommandBinder;
+import com.shundaojia.rxcommand.RxCommandBinder;
+
 
 public class LoginActivity extends AppCompatActivity {
 

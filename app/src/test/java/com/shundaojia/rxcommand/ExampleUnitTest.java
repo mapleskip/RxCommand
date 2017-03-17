@@ -1,4 +1,4 @@
-package me.listenzz.rxcommand;
+package com.shundaojia.rxcommand;
 
 import org.junit.Test;
 

@@ -52,8 +52,8 @@ install {
 
             licenses {
                 license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    name 'MIT'
+                    url 'https://github.com/listenzz/RxCommand/blob/master/LICENSE'
                     distribution 'repo'
                 }
             }
@@ -86,7 +86,7 @@ bintray {
         userOrg = 'shundaojia'
         repo = 'maven'
         name = PROJ_NAME
-        licenses = ['Apache-2.0']
+        licenses = ['MIT']
         vcsUrl = PROJ_VCSURL
         websiteUrl = PROJ_WEBSITEURL
         issueTrackerUrl = PROJ_ISSUETRACKERURL

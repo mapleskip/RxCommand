@@ -1,11 +1,11 @@
-package me.listenzz.rxcommand;
+package com.shundaojia.sample;
 
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
-import me.listenzz.library.RxCommand;
+import com.shundaojia.rxcommand.RxCommand;
 import timber.log.Timber;
 
 /**

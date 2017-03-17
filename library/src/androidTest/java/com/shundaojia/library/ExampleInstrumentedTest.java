@@ -1,4 +1,4 @@
-package me.listenzz.library;
+package com.shundaojia.library;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
