@@ -1,5 +1,5 @@
 group = PROJ_GROUP
-version = PROJ_VERSION
+version = android.defaultConfig.versionName
 project.archivesBaseName = PROJ_ARTIFACTID
 
 apply plugin: 'com.jfrog.bintray'
@@ -28,7 +28,7 @@ javadoc {
         author true
         version true
         links "https://androiddoc.qiniudn.com/reference/"
-        title "$PROJ_NAME $PROJ_VERSION"
+        title "$PROJ_NAME $android.defaultConfig.versionName"
     }
 }
 
@@ -48,7 +48,7 @@ install {
             packaging 'aar'
             groupId PROJ_GROUP
             artifactId PROJ_ARTIFACTID
-            version PROJ_VERSION
+            version android.defaultConfig.versionName
 
             licenses {
                 license {
@@ -83,7 +83,6 @@ bintray {
     publish = true
 
     pkg {
-        userOrg = 'shundaojia'
         repo = 'maven'
         name = PROJ_NAME
         licenses = ['MIT']
@@ -92,9 +91,9 @@ bintray {
         issueTrackerUrl = PROJ_ISSUETRACKERURL
         publicDownloadNumbers = true
         version {
-            name = PROJ_VERSION
+            name = android.defaultConfig.versionName
             desc = PROJ_DESCRIPTION
-            vcsTag = PROJ_VERSION
+            vcsTag = android.defaultConfig.versionName
             gpg {
                 sign = true
             }
