@@ -14,6 +14,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+
 import com.shundaojia.rxcommand.RxCommandBinder;
 
 
@@ -40,18 +41,18 @@ public class LoginActivity extends AppCompatActivity {
         viewModel = new LoginViewModel();
 
         //bind view model
-        RxTextView.textChanges(phoneNumberEditText).map(charSequence -> charSequence.toString()).subscribe(viewModel.getPhoneNumber());
-        RxTextView.textChanges(verificationCodeEditText).map(charSequence -> charSequence.toString()).subscribe(viewModel.getVerificationCode());
+        RxTextView.textChanges(phoneNumberEditText).subscribe(viewModel.phoneNumber());
+        RxTextView.textChanges(verificationCodeEditText).subscribe(viewModel.verificationCode());
 
-        Disposable disposable =RxCommandBinder.bind(verificationCodeButton, viewModel.getVerificationCodeCommand());
+        Disposable disposable = RxCommandBinder.bind(verificationCodeButton, viewModel.verificationCodeCommand());
         compositeDisposable.add(disposable);
-        disposable = RxCommandBinder.bind(loginButton, viewModel.getLoginCommand());
+        disposable = RxCommandBinder.bind(loginButton, viewModel.loginCommand());
         compositeDisposable.add(disposable);
 
         //respond to command
 
         //fetch verification code
-        disposable = viewModel.getVerificationCodeCommand()
+        disposable = viewModel.verificationCodeCommand()
                 .executing()
                 .subscribe(executing -> {
                     if (executing) {
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
         compositeDisposable.add(disposable);
 
-        disposable = viewModel.getVerificationCodeCommand()
+        disposable = viewModel.verificationCodeCommand()
                 .switchToLatest()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show());
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //countdown
-        disposable = viewModel.getCountdownCommand()
+        disposable = viewModel.countdownCommand()
                 .executing()
                 .subscribe(executing -> {
                     if (!executing) {
@@ -79,14 +80,14 @@ public class LoginActivity extends AppCompatActivity {
                 });
         compositeDisposable.add(disposable);
 
-        disposable = viewModel.getCountdownCommand()
+        disposable = viewModel.countdownCommand()
                 .switchToLatest()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(s -> verificationCodeButton.setText(s));
         compositeDisposable.add(disposable);
 
         //login
-        disposable = viewModel.getLoginCommand()
+        disposable = viewModel.loginCommand()
                 .executing()
                 .subscribe(executing -> {
                     if (executing) {
@@ -98,14 +99,14 @@ public class LoginActivity extends AppCompatActivity {
         compositeDisposable.add(disposable);
 
         disposable = Observable.merge(
-                viewModel.getVerificationCodeCommand().errors(),
-                viewModel.getLoginCommand().errors())
+                viewModel.verificationCodeCommand().errors(),
+                viewModel.loginCommand().errors())
                 .subscribe(throwable ->
-                    Toast.makeText(LoginActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(LoginActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show()
                 );
         compositeDisposable.add(disposable);
 
-        disposable = viewModel.getLoginCommand()
+        disposable = viewModel.loginCommand()
                 .switchToLatest()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(success -> {

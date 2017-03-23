@@ -14,74 +14,74 @@ import timber.log.Timber;
 
 public class LoginViewModel {
 
-    private RxCommand<String> countdownCommand;
-    private RxCommand<Boolean> loginCommand;
-    private RxCommand<String> verificationCodeCommand;
+    private RxCommand<String> _countdownCommand;
+    private RxCommand<Boolean> _loginCommand;
+    private RxCommand<String> _verificationCodeCommand;
 
-    private Subject<String> phoneNumber;
-    private Subject<String> verificationCode;
+    private Subject<CharSequence> _phoneNumber;
+    private Subject<CharSequence> _verificationCode;
 
-    private Observable<Boolean> verificationCodeValid;
-    private Observable<Boolean> phoneNumberValid;
+    private Observable<Boolean> _verificationCodeValid;
+    private Observable<Boolean> _phoneNumberValid;
 
     public LoginViewModel() {
-        phoneNumber = BehaviorSubject.create();
-        verificationCode = BehaviorSubject.create();
+        _phoneNumber = BehaviorSubject.create();
+        _verificationCode = BehaviorSubject.create();
 
-        verificationCodeValid = verificationCode.map(s -> s.trim().length() == 6);
-        phoneNumberValid = phoneNumber.map(s -> s.trim().length() == 11);
+        _verificationCodeValid = _verificationCode.map(s -> s.toString().trim().length() == 6);
+        _phoneNumberValid = _phoneNumber.map(s -> s.toString().trim().length() == 11);
     }
 
-    public Subject<String> getPhoneNumber() {
-        return phoneNumber;
+    public Subject<CharSequence> phoneNumber() {
+        return _phoneNumber;
     }
 
-    public Subject<String> getVerificationCode() {
-        return verificationCode;
+    public Subject<CharSequence> verificationCode() {
+        return _verificationCode;
     }
 
-    public RxCommand<String> getVerificationCodeCommand() {
-        if (verificationCodeCommand == null) {
+    public RxCommand<String> verificationCodeCommand() {
+        if (_verificationCodeCommand == null) {
             Observable<Boolean> enabled = Observable.combineLatest(
-                    phoneNumberValid,
-                    getCountdownCommand().executing(),
+                    _phoneNumberValid,
+                    countdownCommand().executing(),
                     (valid, executing) -> valid && !executing);
 
-            verificationCodeCommand = RxCommand.create(enabled, o -> {
-                String phone = phoneNumber.blockingFirst();
+            _verificationCodeCommand = RxCommand.create(enabled, o -> {
+                String phone = _phoneNumber.blockingFirst().toString();
                 Timber.i("fetch verification code with %s", phone);
                 Observable fetchCode =  fetchVerificationCode(phone);
-                Observable countdown =  Observable.defer(() -> getCountdownCommand().execute(null).ignoreElements().toObservable()) ;
+                Observable countdown =  Observable.defer(() -> countdownCommand().execute(null).ignoreElements().toObservable()) ;
                 return Observable.concat(fetchCode, countdown);
             });
         }
-        return verificationCodeCommand;
+        return _verificationCodeCommand;
     }
 
-    public RxCommand<String> getCountdownCommand() {
-        if (countdownCommand == null) {
-            countdownCommand = RxCommand.create(o -> Observable
+    public RxCommand<String> countdownCommand() {
+        if (_countdownCommand == null) {
+            _countdownCommand = RxCommand.create(o -> Observable
                     .interval(1, TimeUnit.SECONDS)
                     .take(10)//from 0 to 9
                     .map(aLong -> "fetch " + (9 - aLong) + "'"));
         }
-        return countdownCommand;
+        return _countdownCommand;
     }
 
-    public RxCommand<Boolean> getLoginCommand() {
-        if (loginCommand == null) {
+    public RxCommand<Boolean> loginCommand() {
+        if (_loginCommand == null) {
             Observable<Boolean> loginInputValid = Observable.combineLatest(
-                    verificationCodeValid,
-                    phoneNumberValid,
+                    _verificationCodeValid,
+                    _phoneNumberValid,
                     (codeValid, phoneValid) -> codeValid && phoneValid);
 
-            loginCommand = RxCommand.create(loginInputValid, o -> {
-                String phone = phoneNumber.blockingFirst();
-                String code = verificationCode.blockingFirst();
+            _loginCommand = RxCommand.create(loginInputValid, o -> {
+                String phone = _phoneNumber.blockingFirst().toString();
+                String code = _verificationCode.blockingFirst().toString();
                 return login(phone, code);
             });
         }
-        return loginCommand;
+        return _loginCommand;
     }
 
     private Observable<Boolean> login(String phoneNumber, String code) {
