@@ -25,6 +25,8 @@ DataBinding需要把代码写到XML中，一方面不优雅，另一方面代码
 
 ## 使用 
 
+### Demo
+
 ### 集成到项目
 
 ```gradle
@@ -35,7 +37,7 @@ repositories {
 }
 ``` 
 
-```
+```gradle
 dependencies {
     compile 'com.shundaojia.rxcommand:rxcommand:0.0.4'
 }
