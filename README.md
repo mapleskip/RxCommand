@@ -1,15 +1,15 @@
 # RxCommand
-一个基于RxJava，不需要借助XML来实现MVVM架构的轮子。 
+一个基于 RxJava, 不需要借助 XML 来实现 MVVM 架构的轮子。 
 
 ## 为什么不用MVP 
 
-MVP用接口隔离了view和presenter，需要定义接口，比较繁琐。在使用dagger这类依赖注入框架时，也不够便利，需要定义presenter的基类，也必须至少定义view的接口。presenter和view以接口的形式相互依赖，表面上它们是分离的，presenter对view是弱拥有关系，实际上presenter拥有对view的控制权，它们交互过于频繁，导致一个流程的代码散落在它们的各个角落，给阅读和理解代码带来不便。
+MVP 用接口隔离了 view 和 presenter, 需要定义接口，比较繁琐。在使用 dagger 这类依赖注入框架时，也不够便利，需要定义 presenter 的基类，也必须至少定义 view 的接口。presenter 和 view 以接口的形式相互依赖，表面上它们是分离的，presenter 对 view 是弱拥有关系，实际上 presenter 拥有对 view 的控制权，它们交互过于频繁，导致一个流程的代码散落在它们的各个角落，给阅读和理解代码带来不便。
 
 ## 为什么不用DataBinding
 
-DataBinding需要把代码写到XML中，一方面不优雅，另一方面代码更为分散，无论是编写还是阅读测试维护都比较困难，实在是不喜欢。 
+DataBinding 需要把代码写到 XML 中，一方面不优雅，另一方面代码更为分散，无论是编写还是阅读测试维护都比较困难，实在是不喜欢。 
 
-`RxJava + MVP`是目前比较流行的技术选型，只需要借助这个不到两百行代码的轮子，便可以轻松实现`RxJava + MVVM`。项目同时附加了demo。
+`RxJava + MVP` 是目前比较流行的技术选型，只需要借助这个不到 300 行代码的轮子，便可以轻松实现 `RxJava + MVVM`。项目同时附加了 demo。
 
 ## ViewModel
 
@@ -84,7 +84,7 @@ viewModel.countdownCommand()
         });
 
 //处理登录执行状态
-disposable = viewModel.loginCommand()
+viewModel.loginCommand()
         .executing()
         .subscribe(executing -> {
             if (executing) {
@@ -115,15 +115,15 @@ viewModel.loginCommand()
         });
 ``` 
 
-So，分离关注点后，是不是很清晰？代码也没有写得到处都是，是不是很好阅读？下载源码，运行demo来看看效果吧。
+从上面的例子可以看到，RxCommand 有效分离了enabled， executing， success， error 等异步任务常有的关注点，使我们可以有选择地处理它们，各个处理的代码互不依赖。要实现这样的功能，ViewModel 需要几行代码呢？ **110** 行. 欲知详情，clone 代码来看看吧。
 
 ### 集成到项目
 
 ```gradle
-repositories {
-    maven {
-        url "https://dl.bintray.com/listenzz/maven"
-    }
+buildscript {
+	repositories {
+	    jcenter()
+	}
 }
 ``` 
 
